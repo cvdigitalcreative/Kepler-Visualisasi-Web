@@ -1,0 +1,52 @@
+.admin__navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f7f7fa;
+    color: black;
+    padding: 20px 20px;
+    position: sticky;
+    flex: 1;
+}
+
+.admin__inputTitle {
+    padding: 20px;
+}
+
+.admin__inputData {
+    padding: 20px;
+}
+
+.admin__datatable {
+    margin-top: 2rem;
+}
+
+.admin__navbarRightButton {
+    padding: 10px 50px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    background-color: #857afa;
+    text-decoration: none;
+    border: none;
+}
+
+.admin__navbarRightButton:hover {
+    cursor: pointer;
+    background-color: #7569ff;
+}
+
+.admin__inputButton {
+    margin-top: 2rem;
+    padding: 10px 50px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    background-color: #857afa;
+    text-decoration: none;
+    border: none;
+}
+
+.admin__inputButton:hover {
+    cursor: pointer;
+    background-color: #7569ff;
+}

@@ -1,0 +1,37 @@
+.login {
+    flex: 1;
+    justify-items: center;
+    justify-content: center;
+}
+
+.login__inputEmail {
+    margin-top: 2rem;
+}
+
+.login__inputPassword {
+    margin-top: 1rem;
+}
+
+.login__loginFormEmail {
+    padding: 10px 20px;
+}
+
+.login__loginFormPassword {
+    padding: 10px 20px;
+}
+
+.login__loginButton {
+    margin-top: 2rem;
+    padding: 10px 80px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    background-color: #857afa;
+    text-decoration: none;
+    border: none;
+}
+
+.login__loginButton:hover {
+    cursor: pointer;
+    background-color: #7569ff;
+}
