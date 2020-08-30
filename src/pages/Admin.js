@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import XLSX from 'xlsx';
-import { make_cols } from './MakeColumns';
+import { make_cols } from '../MakeColumns';
+import { SheetJSFT } from '../types';
 import Axios from 'axios';
 import DataTable from 'react-data-table-component';
-import './Home.css';
+import '../css/Admin.css';
 import { Link } from 'react-router-dom';
+import API_KEY from '../components/Api'
+import WEB_ROUTE from '../components/WebRoute'
 
 class ExcelReader extends Component {
 	constructor(props) {
@@ -17,19 +20,19 @@ class ExcelReader extends Component {
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
-
 	state = {
 		data: [],
 		selectedRows: null
 	};
+
 	async createItem(name, jdata) {
 		console.log('ItemService.createItem():');
 		let satad = JSON.stringify(jdata);
 		let bodi = JSON.stringify({ jsondata: satad, nama: name });
 
-		return fetch('https://api.classico.id/rahmad/save/', {
+		return fetch(`${API_KEY}save/`, {
 			method: 'POST',
-			//   mode: "no-cors",
+			// mode: 'no-cors',
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json'
@@ -52,7 +55,7 @@ class ExcelReader extends Component {
 
 	async getItem() {
 		console.log('ItemService.getItem():');
-		return fetch('https://api.classico.id/rahmad/list/data/', {
+		return fetch(`${API_KEY}list/data/`, {
 			method: 'GET',
 			headers: {
 				Accept: 'application/json',
@@ -73,19 +76,12 @@ class ExcelReader extends Component {
 
 	componentDidMount() {
 		this.fetchData();
-		// console.log(this.state);
 	}
 
 	fetchData = () => {
-		Axios.get('https://api.classico.id/rahmad/list/data/')
+		Axios.get(`${API_KEY}list/data/`)
 			.then((response) => {
 				if (response.status === 200) {
-					// for (let i = 0; i < response.data.data.length; i++) {
-					// 	let id = response.data.data[i].id;
-					// 	response.data.data[i].action = `<div> <Link to="/show/${id}"><Button type="submit" fullWidth variant="contained" color="primary" >Lihat</Button></Link> </div>`;
-
-					// }
-					// console.log(response.data.data);
 					this.setState({
 						data: response.data.data
 					});
@@ -164,12 +160,11 @@ class ExcelReader extends Component {
 	handleAction = (state) => {
 		// You can use setState or dispatch with something like Redux so we can use the retrieved data
 		console.log('Selected Rows: ', state.selectedRows);
-		// return history.push('/show/1')
 	};
 
 	handleChanges = (state) => {
-		const id = `/show/${state.id}`;
-		window.location.href = `http://localhost:3000/show/${state.id}`;
+		// const id = `/show/${state.id}`;
+		window.location.href = `${WEB_ROUTE}show/${state.id}`;
 		this.context.router.transitionTo();
 	};
 
@@ -178,21 +173,42 @@ class ExcelReader extends Component {
 			<div className="admin">
 				<div className="admin__navbar">
 					<div className="admin__navbarLeft">
-						<h2>Visualisasi Data</h2>
+						<h2>Administrator</h2>
 					</div>
 					<Link to="/login">
 						<div className="admin__navbarRight">
-							<button className="admin__navbarRightButton">Login</button>
+							<button className="admin__navbarRightButton">Logout</button>
 						</div>
 					</Link>
 				</div>
 				<div>
 					<div className="admin__inputTitle">
+						<div className="admin__inputTitle">
+							<h1>
+								<label htmlFor="file">Upload Data Visualisasi</label>
+							</h1>
+						</div>
+						<div className="admin__inputData">
+							<input
+								type="file"
+								className="form-control"
+								id="file"
+								accept={SheetJSFT}
+								onChange={this.handleChange}
+							/>
+							<br />
+							<div>
+								<button className="admin__inputButton" type="submit" onClick={this.handleFile}>
+									Submit Data
+								</button>
+							</div>
+						</div>
 						<div className="admin__datatable">
 							<DataTable
 								title="Data Beban Puncak"
 								columns={this.columns}
 								data={this.state.data}
+								// selectableRows // add for checkbox selection
 								Clicked
 								subHeader
 								Button

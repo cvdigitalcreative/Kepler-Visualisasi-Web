@@ -8,8 +8,8 @@ import useSwr from 'swr';
 import KeplerGl from 'kepler.gl';
 import { useParams } from 'react-router-dom';
 import Axios from 'axios';
-
-const mapbox_API = 'pk.eyJ1IjoibWRlZGVhbGYiLCJhIjoiY2tkdTN5dDY1MTRnbjJ0bnlwMXo0bnQ5MyJ9.aAMQ4VB9Ty6tPbrVZwkWvg';
+import API_KEY from '../components/Api'
+import MAPBOX_API from '../components/MapboxApi'
 
 const reducers = combineReducers({
 	keplerGl: keplerGlReducer
@@ -38,7 +38,7 @@ class Fun {
 	}
 
 	fetchData = (id) => {
-		Axios.get(`https://api.classico.id/rahmad/data/${id}`)
+		Axios.get(`${API_KEY}${id}`)
 			.then((response) => {
 				if (response.data.status === 'Success') {
 					this.state.data = response.data.data;
@@ -57,7 +57,7 @@ function Map() {
 	let state = { data: null };
 
 	function fetchData(id) {
-		Axios.get(`https://api.classico.id/rahmad/data/${id}`)
+		Axios.get(`${API_KEY}data/${id}`)
 			.then((response) => {
 				if (response.data.status === 'Success') {
 					console.log(response.data.data.path);
@@ -72,7 +72,7 @@ function Map() {
 
 	const dispatch = useDispatch();
 	const { data } = useSwr('Nama', async () => {
-		const response = await fetch(`https://api.classico.id/rahmad/data/${id}`);
+		const response = await fetch(`${API_KEY}data/${id}`);
 		const data = await response.json();
 		return data;
 	});
@@ -149,7 +149,7 @@ function Map() {
 	return (
 		<KeplerGl
 			id="test_time_amp"
-			mapboxApiAccessToken={mapbox_API}
+			mapboxApiAccessToken={MAPBOX_API}
 			width={window.innerWidth}
 			height={window.innerHeight}
 			theme="light"

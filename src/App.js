@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Kepler from './Kepler';
-import Admin from './Admin';
-import Login from './Login';
-import Home from './Home';
+import Kepler from './pages/Kepler';
+import Admin from './pages/Admin';
+import Login from './pages/Login';
+import Home from './pages/Home';
 
 function App() {
 	return (

@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router-dom';
-import './Login.css';
+import '../css/Login.css';
+import API_KEY from '../components/Api'
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -42,7 +43,7 @@ export default function SignIn() {
 		console.log('ItemService.login():');
 		let bodi = JSON.stringify({ email: email, password: password });
 
-		return fetch('https://api.classico.id/rahmad/admin/login/', {
+		return fetch(`${API_KEY}admin/login/`, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
