@@ -124,7 +124,8 @@ class ExcelReader extends Component {
 						parseFloat(this.state.data[i].Amp),
 						this.state.data[i].amp,
 						parseFloat(this.state.data[i].MW),
-						this.state.data[i].Cuaca
+						this.state.data[i].Cuaca,
+						this.state.data[i].Kecamatan
 					];
 				}
 

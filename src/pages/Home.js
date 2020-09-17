@@ -14,7 +14,8 @@ class ExcelReader extends Component {
 		this.state = {
 			file: {},
 			data: [],
-			cols: []
+			cols: [],
+			path: {}
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -130,7 +131,8 @@ class ExcelReader extends Component {
 						parseFloat(this.state.data[i].Amp),
 						this.state.data[i].amp,
 						parseFloat(this.state.data[i].MW),
-						this.state.data[i].Cuaca
+						this.state.data[i].Cuaca,
+						this.state.data[i].Kecamatan
 					];
 				}
 
@@ -169,7 +171,23 @@ class ExcelReader extends Component {
 		// return history.push('/show/1')
 	};
 
+	// fetchDatas = (id) => {
+	// 	Axios.get(`${API_KEY}data/html/${id}`)
+	// 		.then((response) => {
+	// 			if (response.status === 200) {
+	// 				this.setState({
+	// 					path: response.data.data
+	// 				});
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error);
+	// 		});
+	// };
+
 	handleChanges = (state) => {
+		// this.fetchDatas(state.id);
+		// console.log(state.path);
 		const id = `/show/${state.id}`;
 		window.location.href = `${WEB_ROUTE}show/${state.id}`;
 		this.context.router.transitionTo();
