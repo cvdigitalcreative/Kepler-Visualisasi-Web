@@ -1,0 +1,16 @@
+.button-style-input {
+    padding: 8px;
+    background-color: #7569ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: auto;
+    text-decoration: none;
+}
+
+.button-style-input:hover {
+    background-color: #7569ff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}

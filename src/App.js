@@ -22,6 +22,9 @@ function App() {
 					<Route path="/show/:id">
 						<Kepler />
 					</Route>
+					<Route path="/show/html/:id">
+						
+					</Route>
 				</Switch>
 			</Router>
 		</div>

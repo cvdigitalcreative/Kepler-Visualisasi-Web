@@ -50,3 +50,71 @@
     cursor: pointer;
     background-color: #7569ff;
 }
+
+.button-style-input {
+    padding: 8px;
+    background-color: #7569ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: auto;
+    text-decoration: none;
+}
+
+.button-style-input:hover {
+    background-color: #7569ff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button-style-view {
+    padding: 8px;
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: auto;
+    text-decoration: none;
+}
+
+.button-style-view:hover {
+    background-color: gray;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button-style-edit {
+    padding: 8px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: auto;
+    text-decoration: none;
+}
+
+.button-style-edit:hover {
+    background-color: green;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button-style-delete {
+    padding: 8px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: auto;
+    text-decoration: none;
+}
+
+.button-style-delete:hover {
+    background-color: red;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}

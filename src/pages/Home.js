@@ -5,8 +5,7 @@ import Axios from 'axios';
 import DataTable from 'react-data-table-component';
 import '../css/Home.css';
 import { Link } from 'react-router-dom';
-import API_KEY from '../components/Api'
-import WEB_ROUTE from '../components/WebRoute'
+import API_KEY from '../components/Api';
 
 class ExcelReader extends Component {
 	constructor(props) {
@@ -14,6 +13,7 @@ class ExcelReader extends Component {
 		this.state = {
 			file: {},
 			data: [],
+			url: {},
 			cols: []
 		};
 		this.handleFile = this.handleFile.bind(this);
@@ -82,12 +82,6 @@ class ExcelReader extends Component {
 		Axios.get(`${API_KEY}list/data/`)
 			.then((response) => {
 				if (response.status === 200) {
-					// for (let i = 0; i < response.data.data.length; i++) {
-					// 	let id = response.data.data[i].id;
-					// 	response.data.data[i].action = `<div> <Link to="/show/${id}"><Button type="submit" fullWidth variant="contained" color="primary" >Lihat</Button></Link> </div>`;
-
-					// }
-					// console.log(response.data.data);
 					this.setState({
 						data: response.data.data
 					});
@@ -130,7 +124,8 @@ class ExcelReader extends Component {
 						parseFloat(this.state.data[i].Amp),
 						this.state.data[i].amp,
 						parseFloat(this.state.data[i].MW),
-						this.state.data[i].Cuaca
+						this.state.data[i].Cuaca,
+						this.state.data[i].Kecamatan
 					];
 				}
 
@@ -166,13 +161,36 @@ class ExcelReader extends Component {
 	handleAction = (state) => {
 		// You can use setState or dispatch with something like Redux so we can use the retrieved data
 		console.log('Selected Rows: ', state.selectedRows);
-		// return history.push('/show/1')
 	};
 
+	async getHtml(url) {
+		await Axios.get(`${url}`)
+			.then((response) => {
+				if (response.data.status === 'Success') {
+					console.log(response.data.data);
+					this.setState(
+						{
+							url: response.data.data
+						},
+						() => {
+							window.location.href = `${API_KEY}${this.state.url}`;
+							this.context.router.transitionTo();
+						}
+					);
+
+					return response.data.data;
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 	handleChanges = (state) => {
-		const id = `/show/${state.id}`;
-		window.location.href = `${WEB_ROUTE}show/${state.id}`;
-		this.context.router.transitionTo();
+		let htmlLink = `${API_KEY}data/html/${state.id}`;
+
+		this.getHtml(htmlLink);
+		console.log(this.state.url);
 	};
 
 	render() {
@@ -195,9 +213,9 @@ class ExcelReader extends Component {
 								title="Data Beban Puncak"
 								columns={this.columns}
 								data={this.state.data}
-								Clicked
+								// Clicked
 								subHeader
-								Button
+								// Button
 								striped
 								highlightOnHover
 								pointerOnHover

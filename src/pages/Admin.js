@@ -6,20 +6,24 @@ import Axios from 'axios';
 import DataTable from 'react-data-table-component';
 import '../css/Admin.css';
 import { Link } from 'react-router-dom';
-import API_KEY from '../components/Api'
-import WEB_ROUTE from '../components/WebRoute'
+import API_KEY from '../components/Api';
+import WEB_ROUTE from '../components/WebRoute';
+import InputModal from '../components/Modal';
 
-class ExcelReader extends Component {
+class Admin extends Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			file: {},
 			data: [],
-			cols: []
+			cols: [],
+			rowId: {},
+			url: {}
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
+
 	state = {
 		data: [],
 		selectedRows: null
@@ -41,7 +45,6 @@ class ExcelReader extends Component {
 			body: bodi
 		})
 			.then((response) => {
-				// console.log(response);
 				if (response.status !== 200) {
 					throw new Error('HTTP error, status = ' + response.status);
 				}
@@ -63,7 +66,6 @@ class ExcelReader extends Component {
 			}
 		})
 			.then((response) => {
-				console.log(response);
 				if (response.status !== 'Success') {
 					throw new Error('HTTP error, status = ' + response.status);
 				}
@@ -124,7 +126,8 @@ class ExcelReader extends Component {
 						parseFloat(this.state.data[i].Amp),
 						this.state.data[i].amp,
 						parseFloat(this.state.data[i].MW),
-						this.state.data[i].Cuaca
+						this.state.data[i].Cuaca,
+						this.state.data[i].Kecamatan
 					];
 				}
 
@@ -154,8 +157,82 @@ class ExcelReader extends Component {
 			name: 'Path File',
 			selector: 'path',
 			sortable: true
+		},
+		{
+			cell: (row) => <InputModal SetId={row.id} id={row.id} />,
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true
+		},
+		{
+			cell: (row) => (
+				<button className="button-style-view" onClick={this.handleOpenData} id={row.id}>
+					Lihat Visual
+				</button>
+			),
+			ignoreRowClick: false,
+			allowOverflow: true,
+			button: true
+		},
+		{
+			cell: (row) => (
+				<button className="button-style-delete" onClick={this.handleDeleteData} id={row.id}>
+					Delete Data
+				</button>
+			),
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true
 		}
 	];
+
+	async getHtml(url) {
+		Axios.get(`${url}`)
+			.then((response) => {
+				if (response.data.status === 'Success') {
+					console.log(response.data.data);
+					this.setState(
+						{
+							url: response.data.data
+						},
+						() => {
+							console.log(this.state.url);
+							window.location.href = `${API_KEY}${this.state.url}`;
+							this.context.router.transitionTo();
+						}
+					);
+
+					return response.data.data;
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
+	handleDeleteData = (state) => {
+		let deleteDataUrl = state.target.id;
+
+		return fetch(`${API_KEY}delete/data/${deleteDataUrl}`, {
+			method: 'DELETE'
+		})
+			.then((response) => {
+				console.log(response);
+				if (response.status !== 200) {
+					throw new Error('HTTP error, status = ' + response.status);
+				}
+				window.location.reload(false);
+				return response.json();
+			})
+			.catch((error) => {
+				console.log(error.message);
+			});
+	};
+
+	handleOpenData = (state) => {
+		let htmlLink = `${API_KEY}data/html/${state.target.id}`;
+		this.getHtml(htmlLink);
+	};
 
 	handleAction = (state) => {
 		// You can use setState or dispatch with something like Redux so we can use the retrieved data
@@ -163,7 +240,6 @@ class ExcelReader extends Component {
 	};
 
 	handleChanges = (state) => {
-		// const id = `/show/${state.id}`;
 		window.location.href = `${WEB_ROUTE}show/${state.id}`;
 		this.context.router.transitionTo();
 	};
@@ -208,7 +284,6 @@ class ExcelReader extends Component {
 								title="Data Beban Puncak"
 								columns={this.columns}
 								data={this.state.data}
-								// selectableRows // add for checkbox selection
 								Clicked
 								subHeader
 								Button
@@ -225,4 +300,4 @@ class ExcelReader extends Component {
 	}
 }
 
-export default ExcelReader;
+export default Admin;
