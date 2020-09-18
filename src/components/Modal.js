@@ -5,6 +5,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import '../css/Modal.css';
 import API_KEY from '../components/Api';
+import Axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 	modal: {
@@ -24,6 +25,7 @@ export default function TransitionsModal(props) {
 	const classes = useStyles();
 	const [ selectedFiles, setSelectedFiles ] = useState();
 	const [ open, setOpen ] = useState(false);
+	let filee = null;
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -34,37 +36,20 @@ export default function TransitionsModal(props) {
 	};
 
 	const selectFile = (e) => {
-		const files = e.target.files;
-		if (files && files[0]) setSelectedFiles({ selectedFiles: files[0] });
+		const files = e.target.files[0];
+		filee = e.target.files;
+		if (files && files[0]) setSelectedFiles({ selectedFiles: files });
 	};
 
 	const upload = async () => {
 		let file = { selectedFiles };
-		console.log(file);
-
 		const formData = new FormData();
-		formData.append('file', file);
-
-		return fetch(`${API_KEY}upload/html/${props.SetId}`, {
-			method: 'POST',
-			// mode: 'no-cors',
-			headers: {
-				Accept: 'multipart/form-data',
-				'Content-Type': 'multipart/form-data'
-			},
-			body: formData
+		formData.append('file', filee[0]);
+		Axios.post(`${API_KEY}upload/html/${props.SetId}`, formData, {
 		})
-			.then((response) => {
-				console.log(response);
-				if (response.status !== 200) {
-					throw new Error('HTTP error, status = ' + response.status);
-				}
-				window.location.reload();
-				return response.json();
-			})
-			.catch((error) => {
-				console.log(error.message);
-			});
+		.then(res => {
+			console.log(res.statusText)
+		})
 	};
 
 	return (
