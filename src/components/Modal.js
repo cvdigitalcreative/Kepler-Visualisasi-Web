@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionsModal(props) {
 	const classes = useStyles();
-	const [ selectedFiles, setSelectedFiles ] = useState();
 	const [ open, setOpen ] = useState(false);
 	let filee = null;
 
@@ -36,19 +35,17 @@ export default function TransitionsModal(props) {
 	};
 
 	const selectFile = (e) => {
-		const files = e.target.files[0];
 		filee = e.target.files;
-		if (files && files[0]) setSelectedFiles({ selectedFiles: files });
 	};
 
 	const upload = async () => {
-		let file = { selectedFiles };
 		const formData = new FormData();
 		formData.append('file', filee[0]);
 		Axios.post(`${API_KEY}upload/html/${props.SetId}`, formData, {
 		})
 		.then(res => {
 			console.log(res.statusText)
+			window.location.reload(false);
 		})
 	};
 
