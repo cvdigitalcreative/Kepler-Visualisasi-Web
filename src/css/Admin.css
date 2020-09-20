@@ -118,3 +118,15 @@
     font-weight: 600;
     cursor: pointer;
 }
+
+.input-excel {
+    margin-bottom: 10px;
+}
+
+.admin__chooseGardu > select {
+    padding: 5px;
+}
+
+.admin__chooseBulan > select {
+    padding: 5px;
+}

@@ -18,7 +18,11 @@ class Admin extends Component {
 			data: [],
 			cols: [],
 			rowId: {},
-			url: {}
+			url: {},
+			gardu: [],
+			bulan: [],
+			getGardu: null,
+			getBulan: null,
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -29,10 +33,10 @@ class Admin extends Component {
 		selectedRows: null
 	};
 
-	async createItem(name, jdata) {
+	async createItem(name, jdata, gardu, bulan) {
 		console.log('ItemService.createItem():');
 		let satad = JSON.stringify(jdata);
-		let bodi = JSON.stringify({ jsondata: satad, nama: name });
+		let bodi = JSON.stringify({ jsondata: satad, nama: name, gardu: gardu, bulan: bulan });
 
 		return fetch(`${API_KEY}save/`, {
 			method: 'POST',
@@ -56,28 +60,30 @@ class Admin extends Component {
 			});
 	}
 
-	async getItem() {
-		console.log('ItemService.getItem():');
-		return fetch(`${API_KEY}list/data/`, {
-			method: 'GET',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
-			}
-		})
-			.then((response) => {
-				if (response.status !== 'Success') {
-					throw new Error('HTTP error, status = ' + response.status);
-				}
-				return response.json();
-			})
-			.catch((error) => {
-				console.log(error.message);
-			});
-	}
+	// async getItem() {
+	// 	console.log('ItemService.getItem():');
+	// 	return fetch(`${API_KEY}list/data/`, {
+	// 		method: 'GET',
+	// 		headers: {
+	// 			Accept: 'application/json',
+	// 			'Content-Type': 'application/json'
+	// 		}
+	// 	})
+	// 		.then((response) => {
+	// 			if (response.status !== 'Success') {
+	// 				throw new Error('HTTP error, status = ' + response.status);
+	// 			}
+	// 			return response.json();
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log(error.message);
+	// 		});
+	// }
 
 	componentDidMount() {
 		this.fetchData();
+		this.getGardu();
+		this.getBulan();
 	}
 
 	fetchData = () => {
@@ -86,6 +92,34 @@ class Admin extends Component {
 				if (response.status === 200) {
 					this.setState({
 						data: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	getGardu = () => {
+		Axios.get(`${API_KEY}data/gardu/`)
+			.then((response) => {
+				if (response.status === 200) {
+					this.setState({
+						gardu: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	getBulan = () => {
+		Axios.get(`${API_KEY}data/bulan/`)
+			.then((response) => {
+				if (response.status === 200) {
+					this.setState({
+						bulan: response.data.data
 					});
 				}
 			})
@@ -131,7 +165,7 @@ class Admin extends Component {
 					];
 				}
 
-				this.createItem(this.state.file.name, final);
+				this.createItem(this.state.file.name, final, this.getGardu, this.getBulan);
 			});
 		};
 
@@ -244,6 +278,14 @@ class Admin extends Component {
 		this.context.router.transitionTo();
 	};
 
+	getGarduHandler = (e) => {
+		this.getGardu = e.target.value;
+	};
+
+	getBulanHandler = (e) => {
+		this.getBulan = e.target.value;
+	};
+	
 	render() {
 		return (
 			<div className="admin">
@@ -261,24 +303,50 @@ class Admin extends Component {
 					<div className="admin__inputTitle">
 						<div className="admin__inputTitle">
 							<h1>
-								<label htmlFor="file">Upload Data Visualisasi</label>
+								<label>Upload Data Visualisasi</label>
 							</h1>
 						</div>
 						<div className="admin__inputData">
+							<label htmlFor="file">Upload Data Excel : </label>
 							<input
 								type="file"
-								className="form-control"
+								className="form-control input-excel"
 								id="file"
 								accept={SheetJSFT}
 								onChange={this.handleChange}
 							/>
+							<div className="admin__chooseGardu">
+								<label htmlFor="gardu">Pilih Gardu : </label>
+								<select id="gardu" onChange={this.getGarduHandler}>
+									{this.state.gardu.map((gardu) => {
+										return (
+											<option value={gardu.id} key={gardu.id}>
+												{gardu.gardu}
+											</option>
+										);
+									})}
+								</select>
+							</div>
 							<br />
+							<div className="admin__chooseBulan">
+								<label htmlFor="gardu">Pilih Bulan : </label>
+								<select id="bulan" onChange={this.getBulanHandler}>
+									{this.state.bulan.map((bulan) => {
+										return (
+											<option value={bulan.id} key={bulan.id}>
+												{bulan.bulan}
+											</option>
+										);
+									})}
+								</select>
+							</div>
 							<div>
 								<button className="admin__inputButton" type="submit" onClick={this.handleFile}>
 									Submit Data
 								</button>
 							</div>
 						</div>
+
 						<div className="admin__datatable">
 							<DataTable
 								title="Data Beban Puncak"
