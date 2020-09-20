@@ -22,7 +22,7 @@ class Admin extends Component {
 			gardu: [],
 			bulan: [],
 			getGardu: null,
-			getBulan: null,
+			getBulan: null
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -269,7 +269,6 @@ class Admin extends Component {
 	};
 
 	handleAction = (state) => {
-		// You can use setState or dispatch with something like Redux so we can use the retrieved data
 		console.log('Selected Rows: ', state.selectedRows);
 	};
 
@@ -285,7 +284,7 @@ class Admin extends Component {
 	getBulanHandler = (e) => {
 		this.getBulan = e.target.value;
 	};
-	
+
 	render() {
 		return (
 			<div className="admin">
@@ -301,12 +300,12 @@ class Admin extends Component {
 				</div>
 				<div>
 					<div className="admin__inputTitle">
-						<div className="admin__inputTitle">
+						<div className="upload-data-title">
 							<h1>
 								<label>Upload Data Visualisasi</label>
 							</h1>
 						</div>
-						<div className="admin__inputData">
+						<div className="">
 							<label htmlFor="file">Upload Data Excel : </label>
 							<input
 								type="file"

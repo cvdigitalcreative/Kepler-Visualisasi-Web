@@ -130,3 +130,15 @@
 .admin__chooseBulan > select {
     padding: 5px;
 }
+
+.cari-data-label {
+    margin-bottom: 20px;
+}
+
+.upload-data-title {
+    margin-bottom: 20px;
+}
+
+.admin__datatable {
+    border-top: 1px solid gray;
+}

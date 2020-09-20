@@ -9,12 +9,17 @@ import API_KEY from '../components/Api';
 
 class ExcelReader extends Component {
 	constructor(props) {
-		super(props);
+		super();
 		this.state = {
 			file: {},
 			data: [],
 			url: {},
-			cols: []
+			cols: [],
+			gardu: [],
+			bulan: [],
+			getGardu: null,
+			getBulan: null,
+			searchData: [],
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -22,8 +27,10 @@ class ExcelReader extends Component {
 
 	state = {
 		data: [],
+		searchData: [],
 		selectedRows: null
 	};
+
 	async createItem(name, jdata) {
 		console.log('ItemService.createItem():');
 		let satad = JSON.stringify(jdata);
@@ -75,8 +82,39 @@ class ExcelReader extends Component {
 
 	componentDidMount() {
 		this.fetchData();
-		// console.log(this.state);
+		this.getGardu();
+		this.getBulan();
 	}
+
+	getGardu = () => {
+		Axios.get(`${API_KEY}data/gardu/`)
+			.then((response) => {
+				if (response.status === 200) {
+					// console.log(response.data);
+					this.setState({
+						gardu: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	getBulan = () => {
+		Axios.get(`${API_KEY}data/bulan/`)
+			.then((response) => {
+				if (response.status === 200) {
+					// console.log(response.data);
+					this.setState({
+						bulan: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	fetchData = () => {
 		Axios.get(`${API_KEY}list/data/`)
@@ -159,7 +197,6 @@ class ExcelReader extends Component {
 	];
 
 	handleAction = (state) => {
-		// You can use setState or dispatch with something like Redux so we can use the retrieved data
 		console.log('Selected Rows: ', state.selectedRows);
 	};
 
@@ -193,6 +230,34 @@ class ExcelReader extends Component {
 		console.log(this.state.url);
 	};
 
+	getGarduHandler = (e) => {
+		this.getGardu = e.target.value;
+	};
+
+	getBulanHandler = (e) => {
+		this.getBulan = e.target.value;
+	};
+
+	getDataSearchingHandler = (url) => {
+		Axios.get(`${url}`)
+			.then((response) => {
+				if (response.status === 200) {
+					this.setState({
+						searchData: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	handleDataSearch = () => {
+		let url = `${API_KEY}data/?gardu=${this.getGardu}&bulan=${this.getBulan}`;
+		this.getDataSearchingHandler(url);
+
+	};
+
 	render() {
 		return (
 			<div className="admin">
@@ -206,6 +271,62 @@ class ExcelReader extends Component {
 						</div>
 					</Link>
 				</div>
+				<div className="admin__inputData">
+					<div>
+						<h1 className="cari-data-label">
+							<label>Cari data</label>
+						</h1>
+					</div>
+
+					<div className="admin__chooseGardu">
+						<label htmlFor="gardu">Pilih Gardu : </label>
+						<select id="gardu" onChange={this.getGarduHandler}>
+							{this.state.gardu.map((gardu) => {
+								return (
+									<option value={gardu.id} key={gardu.id}>
+										{gardu.gardu}
+									</option>
+								);
+							})}
+						</select>
+					</div>
+					<br />
+					<div className="admin__chooseBulan">
+						<label htmlFor="gardu">Pilih Bulan : </label>
+						<select id="bulan" onChange={this.getBulanHandler}>
+							{this.state.bulan.map((bulan) => {
+								return (
+									<option value={bulan.id} key={bulan.id}>
+										{bulan.bulan}
+									</option>
+								);
+							})}
+						</select>
+					</div>
+					<div className="cari-data-button">
+						<button className="admin__inputButton" type="submit" onClick={this.handleDataSearch}>
+							Cari Data
+						</button>
+					</div>
+				</div>
+
+				<div>
+					<div className="admin__inputTitle">
+						<div className="admin__datatable">
+							<DataTable
+								title="Data Beban Puncak berdasarkan pencarian"
+								columns={this.columns}
+								data={this.state.searchData}
+								subHeader
+								striped
+								highlightOnHover
+								pointerOnHover
+								onRowClicked={this.handleChanges}
+							/>
+						</div>
+					</div>
+				</div>
+
 				<div>
 					<div className="admin__inputTitle">
 						<div className="admin__datatable">
