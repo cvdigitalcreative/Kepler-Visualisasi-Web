@@ -131,6 +131,10 @@
     padding: 5px;
 }
 
+.admin__chooseTahun > select {
+    padding: 5px;
+}
+
 .cari-data-label {
     margin-bottom: 20px;
 }

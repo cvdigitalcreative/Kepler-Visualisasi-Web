@@ -21,8 +21,10 @@ class Admin extends Component {
 			url: {},
 			gardu: [],
 			bulan: [],
+			tahun: [],
 			getGardu: null,
-			getBulan: null
+			getBulan: null,
+			getTahun: null
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -33,10 +35,10 @@ class Admin extends Component {
 		selectedRows: null
 	};
 
-	async createItem(name, jdata, gardu, bulan) {
+	async createItem(name, jdata, gardu, bulan, tahun) {
 		console.log('ItemService.createItem():');
 		let satad = JSON.stringify(jdata);
-		let bodi = JSON.stringify({ jsondata: satad, nama: name, gardu: gardu, bulan: bulan });
+		let bodi = JSON.stringify({ jsondata: satad, nama: name, gardu: gardu, bulan: bulan, tahun: tahun });
 
 		return fetch(`${API_KEY}save/`, {
 			method: 'POST',
@@ -84,6 +86,7 @@ class Admin extends Component {
 		this.fetchData();
 		this.getGardu();
 		this.getBulan();
+		this.getTahun();
 	}
 
 	fetchData = () => {
@@ -120,6 +123,20 @@ class Admin extends Component {
 				if (response.status === 200) {
 					this.setState({
 						bulan: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	getTahun = () => {
+		Axios.get(`${API_KEY}data/tahun/`)
+			.then((response) => {
+				if (response.status === 200) {
+					this.setState({
+						tahun: response.data.data
 					});
 				}
 			})
@@ -165,7 +182,7 @@ class Admin extends Component {
 					];
 				}
 
-				this.createItem(this.state.file.name, final, this.getGardu, this.getBulan);
+				this.createItem(this.state.file.name, final, this.getGardu, this.getBulan, this.getTahun);
 			});
 		};
 
@@ -285,6 +302,10 @@ class Admin extends Component {
 		this.getBulan = e.target.value;
 	};
 
+	getTahunHandler = (e) => {
+		this.getTahun = e.target.value;
+	};
+
 	render() {
 		return (
 			<div className="admin">
@@ -328,12 +349,25 @@ class Admin extends Component {
 							</div>
 							<br />
 							<div className="admin__chooseBulan">
-								<label htmlFor="gardu">Pilih Bulan : </label>
+								<label htmlFor="bulan">Pilih Bulan : </label>
 								<select id="bulan" onChange={this.getBulanHandler}>
 									{this.state.bulan.map((bulan) => {
 										return (
 											<option value={bulan.id} key={bulan.id}>
 												{bulan.bulan}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+							<br />
+							<div className="admin__chooseTahun">
+								<label htmlFor="tahun">Pilih Tahun : </label>
+								<select id="tahun" onChange={this.getTahunHandler}>
+									{this.state.tahun.map((tahun) => {
+										return (
+											<option value={tahun.id} key={tahun.id}>
+												{tahun.tahun}
 											</option>
 										);
 									})}

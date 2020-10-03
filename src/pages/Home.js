@@ -17,8 +17,10 @@ class ExcelReader extends Component {
 			cols: [],
 			gardu: [],
 			bulan: [],
+			tahun: [],
 			getGardu: null,
 			getBulan: null,
+			getTahun: null,
 			searchData: [],
 		};
 		this.handleFile = this.handleFile.bind(this);
@@ -84,6 +86,7 @@ class ExcelReader extends Component {
 		this.fetchData();
 		this.getGardu();
 		this.getBulan();
+		this.getTahun();
 	}
 
 	getGardu = () => {
@@ -108,6 +111,21 @@ class ExcelReader extends Component {
 					// console.log(response.data);
 					this.setState({
 						bulan: response.data.data
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	getTahun = () => {
+		Axios.get(`${API_KEY}data/tahun/`)
+			.then((response) => {
+				if (response.status === 200) {
+					// console.log(response.data);
+					this.setState({
+						tahun: response.data.data
 					});
 				}
 			})
@@ -238,6 +256,10 @@ class ExcelReader extends Component {
 		this.getBulan = e.target.value;
 	};
 
+	getTahunHandler = (e) => {
+		this.getTahun = e.target.value;
+	};
+
 	getDataSearchingHandler = (url) => {
 		Axios.get(`${url}`)
 			.then((response) => {
@@ -253,9 +275,8 @@ class ExcelReader extends Component {
 	};
 
 	handleDataSearch = () => {
-		let url = `${API_KEY}data/?gardu=${this.getGardu}&bulan=${this.getBulan}`;
+		let url = `${API_KEY}data/?gardu=${this.getGardu}&bulan=${this.getBulan}&tahun=${this.getTahun}`;
 		this.getDataSearchingHandler(url);
-
 	};
 
 	render() {
@@ -298,6 +319,19 @@ class ExcelReader extends Component {
 								return (
 									<option value={bulan.id} key={bulan.id}>
 										{bulan.bulan}
+									</option>
+								);
+							})}
+						</select>
+					</div>
+					<br/>
+					<div className="admin__chooseTahun">
+						<label htmlFor="tahun">Pilih Tahun : </label>
+						<select id="tahun" onChange={this.getTahunHandler}>
+							{this.state.tahun.map((tahun) => {
+								return (
+									<option value={tahun.id} key={tahun.id}>
+										{tahun.tahun}
 									</option>
 								);
 							})}
