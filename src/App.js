@@ -4,6 +4,7 @@ import Kepler from './pages/Kepler';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import MapView from './pages/MapView'
 
 function App() {
 	return (
@@ -11,6 +12,9 @@ function App() {
 			<Router>
 				<Switch>
 					<Route exact path="/">
+						<MapView />
+					</Route>
+					<Route exact path="/home" >
 						<Home />
 					</Route>
 					<Route exact path="/login">

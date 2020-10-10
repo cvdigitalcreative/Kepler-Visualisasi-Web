@@ -21,7 +21,7 @@ class ExcelReader extends Component {
 			getGardu: null,
 			getBulan: null,
 			getTahun: null,
-			searchData: [],
+			searchData: []
 		};
 		this.handleFile = this.handleFile.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -324,7 +324,7 @@ class ExcelReader extends Component {
 							})}
 						</select>
 					</div>
-					<br/>
+					<br />
 					<div className="admin__chooseTahun">
 						<label htmlFor="tahun">Pilih Tahun : </label>
 						<select id="tahun" onChange={this.getTahunHandler}>
